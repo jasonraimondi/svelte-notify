@@ -1,58 +1,60 @@
-# create-svelte
+# @jmondi/notify-svelte
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This library is a Svelte-based toast notification system. It provides a NotificationService class with `success`, `info`, and `error` methods to display corresponding notifications. Notifications are time-based and will disappear after a given duration (time-to-live or TTL).
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+## Installation
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+pnpm add @jmondi/notify-svelte
 ```
 
-## Developing
+## Usage
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Start by importing the library:
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```ts
+import { notify } from '@jmondi/notify-svelte';
 ```
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+Create notifications using `success`, `info`, and `error` methods. These can accept either a string or a NotifyMessage object:
 
-## Building
+```ts
+// Display a success notification
+notify.success('Task completed successfully!');
 
-To build your library:
+// Display an info notification with a custom title and TTL
+notify.info({ message: 'Processing the request...', title: 'Please wait', ttl: 6000 });
 
-```bash
-npm run package
+// Display an error notification
+notify.error('Oops! Something went wrong...');
 ```
 
-To create a production version of your showcase app:
+Notifications are automatically removed after their TTL expires. However, you can manually remove a notification:
 
-```bash
-npm run build
+```ts
+// Clears a specific notification by its ID
+notify.clear(notificationId);
+
+// Clears all notifications
+notify.clear();
 ```
 
-You can preview the production build with `npm run preview`.
+## Configuration
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+You can optionally create a custom NotificationService instance with your own settings. Available settings include:
 
-## Publishing
+- `ttl`: The default time-to-live for notifications (in milliseconds). Default is 4500.
+- `suppressDuplicates`: Whether to suppress showing notifications that are duplicates of ones already displayed. Default is false.
+- `historyLength`: The number of notifications to keep track of for suppressing duplicates. Default is 5.
 
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
+Here's how you might customize these settings:
 
-To publish your library to [npm](https://www.npmjs.com):
+```ts
+import { NotificationService } from '@jmondi/notify-svelte';
 
-```bash
-npm publish
+const customNotify = new NotificationService({
+  ttl: 5000,
+  suppressDuplicates: true,
+  historyLength: 10,
+});
 ```
