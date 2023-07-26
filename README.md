@@ -1,6 +1,6 @@
 # @jmondi/notify-svelte
 
-This library is a Svelte-based toast notification system. It provides a NotificationService class with `success`, `info`, and `error` methods to display corresponding notifications. Notifications are time-based and will disappear after a given duration (time-to-live or TTL).
+A Svelte-based toast system: NotificationService class with success, info, and error methods. Time-based auto-disappear, no dupes ✨🔮
 
 ## Installation
 
